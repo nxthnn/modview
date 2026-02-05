@@ -1,0 +1,127 @@
+/* Page wrapper */
+.auth-page {
+  min-height: calc(100vh - 90px); /* leaves room for navbar */
+  display: grid;
+  place-items: start center;
+  padding: 48px 16px 80px;
+}
+
+/* Card */
+.auth-card {
+  width: min(560px, 100%);
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+.auth-title {
+  margin: 0 0 14px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Tabs */
+.auth-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0 18px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.auth-tab:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.auth-tab.active {
+  border-color: rgba(0, 153, 255, 0.45);
+  background: rgba(0, 153, 255, 0.12);
+  color: #dbefff;
+}
+
+/* Form */
+.auth-form {
+  display: grid;
+  gap: 14px;
+}
+
+.form-row {
+  display: grid;
+  gap: 8px;
+}
+
+.auth-label {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* Inputs */
+.auth-input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  outline: none;
+}
+
+.auth-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.auth-input:focus {
+  border-color: rgba(0, 153, 255, 0.55);
+  box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.15);
+}
+
+/* Primary button */
+.primary-btn {
+  width: 100%;
+  margin-top: 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 153, 255, 0.45);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 153, 255, 0.35),
+    rgba(0, 153, 255, 0.18)
+  );
+  color: #eaf6ff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  filter: brightness(1.08);
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+}
+
+/* Error + hint */
+.auth-error {
+  margin: 0;
+  color: #ff4d6d;
+  font-weight: 700;
+}
+
+.auth-hint {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}

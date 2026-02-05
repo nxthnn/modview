@@ -1,18 +1,23 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "./components/Navbar.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-import Home from "./pages/Home.jsx";
-import Auth from "./pages/Auth.jsx";
-import Garage from "./pages/Garage.jsx";
-import CarDetail from "./pages/CarDetail.jsx";
-import AiHub from "./pages/AiHub.jsx";
+import Home from "./pages/Home";
+import Auth from "./pages/Auth";
+import Garage from "./pages/Garage";
+import CarDetail from "./pages/CarDetail";
+import AiHub from "./pages/AiHub";
+
+import "./styles/layout.css";
+import "./styles/components.css";
+
+
 
 export default function App() {
   return (
     <>
       <Navbar />
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "16px" }}>
+      <main className="app-container">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
@@ -26,7 +31,7 @@ export default function App() {
             }
           />
           <Route
-            path="/cars/:carId"
+            path="/garage/:id"
             element={
               <ProtectedRoute>
                 <CarDetail />
@@ -41,10 +46,8 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-
-          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </div>
+      </main>
     </>
   );
 }

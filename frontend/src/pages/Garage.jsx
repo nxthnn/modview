@@ -1,53 +1,95 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import "../styles/garage.css";
 
 export default function Garage() {
-  const [cars, setCars] = useState([]);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  // Placeholder cars (API later)
+  const cars = useMemo(
+    () => [
+      { id: 1, name: "Mini Cooper S", year: 2011 },
+      { id: 2, name: "Nissan Micra", year: 2008 },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    const base = import.meta.env.VITE_API_URL;
-    const token = localStorage.getItem("modview_token");
+  // Placeholder: selected car
+  const [selectedCarId] = useState(cars[0]?.id ?? null);
+  const selectedCar = cars.find((c) => c.id === selectedCarId);
 
-    async function load() {
-      try {
-        const res = await fetch(`${base}/api/cars`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Failed to load cars");
-        setCars(data);
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    load();
-  }, []);
+  if (!selectedCar) {
+    return (
+      <section className="garage-page">
+        <h1>My Garage</h1>
+        <p>No cars added yet.</p>
+      </section>
+    );
+  }
 
   return (
-    <div>
-      <h1>My Garage</h1>
+    <section className="garage-page">
+      {/* Breadcrumb like your wireframe */}
+      <div className="breadcrumbs">
+        <Link to="/garage">My Garage</Link>
+        <span>/</span>
+        <span>
+          {selectedCar.name} {selectedCar.year}
+        </span>
+      </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "crimson" }}>{error}</p>}
+      <div className="garage-layout">
+        {/* LEFT: photos area */}
+        <div className="garage-panel">
+          <h1 style={{ marginTop: 0 }}>{selectedCar.name}</h1>
 
-      <ul>
-        {cars.map((c) => (
-          <li key={c._id}>
-            <Link to={`/cars/${c._id}`}>
-              {c.year} {c.make} {c.model}
-            </Link>
-          </li>
-        ))}
-      </ul>
+          <div className="photo-grid" style={{ marginTop: 12 }}>
+            <div className="photo">
+              <span>Front</span>
+            </div>
+            <div className="photo">
+              <span>Back</span>
+            </div>
+            <div className="photo">
+              <span>Driver side</span>
+            </div>
+            <div className="photo">
+              <span>Passenger side</span>
+            </div>
+          </div>
 
-      <p style={{ opacity: 0.7, marginTop: 12 }}>
-        (Next: add “New Car” form + delete.)
-      </p>
-    </div>
+          <div style={{ marginTop: 14 }}>
+            <button className="primary-btn">+ Upload photos</button>
+          </div>
+        </div>
+
+        {/* RIGHT: menu like your wireframe */}
+        <aside className="side-menu">
+          <div className="menu-title">Sections</div>
+
+          {/* These can later become real routes:
+              /garage/:carId/mods, /maintenance, /notes, /ai, /image-gen */}
+          <NavLink className="menu-item" to="/car/1/mods">
+            Modlist
+          </NavLink>
+          <NavLink className="menu-item" to="/car/1/maintenance">
+            Maintenance
+          </NavLink>
+          <NavLink className="menu-item" to="/car/1/notes">
+            Notes / ideas
+          </NavLink>
+          <NavLink className="menu-item" to="/ai">
+            AI adviser
+          </NavLink>
+          <NavLink className="menu-item" to="/car/1/image-gen">
+            Image Gen
+          </NavLink>
+
+          <div style={{ marginTop: 16 }}>
+            <button className="primary-btn" style={{ width: "100%" }}>
+              + Add new car
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
   );
 }
