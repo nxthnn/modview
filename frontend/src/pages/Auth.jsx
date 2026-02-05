@@ -9,19 +9,47 @@ export default function Auth() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  function submit(e) {
-    e.preventDefault();
-    setError("");
+  async function submit(e) {
+  e.preventDefault();
+  setError("");
 
-    if (mode === "register" && password !== confirm) {
-      setError("Passwords do not match.");
+  if (mode === "register" && password !== confirm) {
+    setError("Passwords do not match.");
+    return;
+  }
+
+  const base = import.meta.env.VITE_API_URL;
+  const url =
+    mode === "login"
+      ? `${base}/api/auth/login`
+      : `${base}/api/auth/register`;
+
+  const payload =
+    mode === "login"
+      ? { email, password }
+      : { name: "", email, password };
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.message || "Something went wrong");
       return;
     }
 
-    // TEMP: fake login token. Replace with backend call later.
-    localStorage.setItem("modview_token", "demo-token");
+    localStorage.setItem("modview_token", data.token);
     navigate("/garage");
+  } catch (err) {
+    setError("Network error. Is the backend running?");
   }
+}
+
 
   return (
     <div style={{ maxWidth: 420 }}>
