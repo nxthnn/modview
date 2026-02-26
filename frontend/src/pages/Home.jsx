@@ -1,4 +1,8 @@
 import { Link } from "react-router-dom";
+import "../styles/layout.css";
+import "../styles/components.css";
+import "../styles/auth.css";
+
 
 export default function Home() {
   return (
