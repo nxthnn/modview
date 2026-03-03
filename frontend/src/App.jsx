@@ -6,7 +6,11 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Garage from "./pages/Garage";
 import CarDetail from "./pages/CarDetail";
+import CarTimeline from "./pages/CarTimeline";
 import AiHub from "./pages/AiHub";
+import Feed from "./pages/Feed";
+import Explore from "./pages/Explore";
+import Profile from "./pages/Profile";
 
 import "./styles/layout.css";
 import "./styles/components.css";
@@ -23,6 +27,17 @@ export default function App() {
           <Route path="/auth" element={<Auth />} />
 
           <Route
+            path="/feed"
+            element={
+              <ProtectedRoute>
+                <Feed />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/profile/:id" element={<Profile />} />
+
+          <Route
             path="/garage"
             element={
               <ProtectedRoute>
@@ -35,6 +50,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <CarDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/garage/:id/timeline"
+            element={
+              <ProtectedRoute>
+                <CarTimeline />
               </ProtectedRoute>
             }
           />

@@ -137,3 +137,480 @@
 .breadcrumbs a:hover {
   text-decoration: underline;
 }
+
+/* Car Detail Page */
+.car-detail-container {
+  max-width: 900px;
+  margin: 24px auto;
+}
+
+.car-header {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 80%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.car-image {
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.car-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder-image {
+  font-size: 64px;
+  color: var(--muted);
+}
+
+.car-info h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+}
+
+.car-engine {
+  color: var(--muted);
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+.car-trim {
+  color: var(--muted);
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
+
+.car-mileage {
+  color: var(--muted);
+  margin: 8px 0;
+}
+
+.car-goals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.goal-badge {
+  background: rgba(91, 108, 255, 0.15);
+  border: 1px solid rgba(91, 108, 255, 0.35);
+  color: #a5b4fc;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+
+.timeline-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(91, 108, 255, 0.2), rgba(91, 108, 255, 0.1));
+  border: 1px solid rgba(91, 108, 255, 0.35);
+  border-radius: 6px;
+  color: #a5b4fc;
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+}
+
+.timeline-link:hover {
+  background: linear-gradient(135deg, rgba(91, 108, 255, 0.3), rgba(91, 108, 255, 0.2));
+}
+
+/* Tabs */
+.car-tabs {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+
+.car-tabs button {
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.car-tabs button:hover {
+  color: var(--text);
+}
+
+.car-tabs button.active {
+  color: var(--text);
+  border-bottom-color: var(--brand);
+}
+
+.tab-content {
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.tab-panel {
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 80%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.events-list {
+  display: grid;
+  gap: 12px;
+}
+
+.event-card {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 3px solid var(--brand);
+}
+
+.event-card h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.event-card p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.event-category {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.event-date {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.event-meta {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.car-tags {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.car-tags h3 {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+}
+
+.tag {
+  display: inline-block;
+  background: rgba(91, 108, 255, 0.15);
+  border: 1px solid rgba(91, 108, 255, 0.35);
+  color: #a5b4fc;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+/* Timeline Page */
+.timeline-container {
+  max-width: 800px;
+  margin: 24px auto;
+}
+
+.timeline-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.timeline-tabs button {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.timeline-tabs button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.timeline-tabs button.active {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  border-color: transparent;
+  color: white;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 40px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--brand), transparent);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -38px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--brand);
+  border: 3px solid var(--bg);
+}
+
+.timeline-maintenance .timeline-marker {
+  background: #999;
+}
+
+.timeline-mod .timeline-marker {
+  background: var(--brand);
+}
+
+.timeline-content {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 80%);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.timeline-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.timeline-date {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.timeline-meta {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.timeline-receipts,
+.timeline-photos {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.timeline-receipts a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(91, 108, 255, 0.15);
+  border: 1px solid rgba(91, 108, 255, 0.35);
+  color: #a5b4fc;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.timeline-receipts a:hover {
+  background: rgba(91, 108, 255, 0.25);
+}
+
+.timeline-photos img {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.timeline-photos img:hover {
+  transform: scale(1.05);
+}
+
+/* Cars List */
+.cars-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.car-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 80%);
+}
+
+.car-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.car-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.car-card-info {
+  padding: 16px;
+}
+
+.car-card-info h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.car-card-info p {
+  margin: 4px 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.car-card .car-goals {
+  margin-top: 8px;
+  gap: 4px;
+}
+
+.car-card .goal-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+}
+
+.no-cars {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+}
+
+.add-car-form {
+  display: grid;
+  gap: 12px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 80%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.add-car-form input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  color: var(--text);
+}
+
+.add-car-form button {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.add-car-form button[type="submit"] {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: white;
+}
+
+.add-car-form button[type="button"] {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.primary-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.primary-btn:hover {
+  filter: brightness(1.05);
+}
+
+@media (max-width: 768px) {
+  .car-header {
+    grid-template-columns: 1fr;
+  }
+  
+  .cars-list {
+    grid-template-columns: 1fr;
+  }
+}

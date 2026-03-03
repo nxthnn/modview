@@ -51,6 +51,8 @@ export default function Navbar() {
           <div className="topbar-actions">
             {token ? (
               <>
+                <Link to="/feed">Feed</Link>
+                <Link to="/explore">Explore</Link>
                 <Link to="/garage">My Garage</Link>
                 <Link to="/ai">AI Adviser</Link>
                 <button className="btn btn-danger" onClick={signOut}>
