@@ -23,7 +23,11 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN,
+    origin: [
+      "https://modview.co.uk",
+      "https://www.modview.co.uk",
+      process.env.CLIENT_ORIGIN
+    ].filter(Boolean),
     credentials: false,
   })
 );
@@ -67,9 +71,10 @@ async function start() {
   }
   
   // Start server regardless of DB connection
-  app.listen(process.env.PORT, () => {
-    console.log(`✅ API running on http://localhost:${process.env.PORT}`);
-    console.log(`🌐 Test it: http://localhost:${process.env.PORT}/api/health`);
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`✅ API running on http://localhost:${PORT}`);
+    console.log(`🌐 Test it: http://localhost:${PORT}/api/health`);
   });
 }
 
