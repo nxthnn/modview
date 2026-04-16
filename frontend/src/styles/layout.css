@@ -57,7 +57,7 @@
 
 /* breadcrumb row under top bar */
 .breadcrumbs {
-  max-width: var(--container);
+  width: 50%;
   margin: 0 auto;
   padding: 12px var(--gap-lg);
   border-bottom: 1px solid var(--border);

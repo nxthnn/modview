@@ -14,14 +14,24 @@ const storage = new CloudinaryStorage({
     return {
       folder: "fullstack-car-app",
       resource_type: "auto", // handles both image and video
-      allowed_formats: ["jpg", "jpeg", "png", "gif", "webp", "mp4", "mov", "avi"],
     };
   },
 });
 
+function mediaFileFilter(req, file, cb) {
+  const mime = String(file.mimetype || "").toLowerCase();
+  if (mime.startsWith("image/") || mime.startsWith("video/")) {
+    cb(null, true);
+    return;
+  }
+
+  cb(new Error("Only image and video files are allowed"));
+}
+
 const upload = multer({
   storage: storage,
   limits: { fileSize: 100 * 1024 * 1024 }, // 100MB
+  fileFilter: mediaFileFilter,
 });
 
 module.exports = upload;

@@ -7,17 +7,41 @@ const upload = require("../middleware/upload");
 
 const router = express.Router();
 
+function handlePostUpload(req, res, next) {
+  upload.array("media", 10)(req, res, (err) => {
+    if (!err) return next();
+
+    const message =
+      err?.message ||
+      err?.error?.message ||
+      (typeof err === "string" ? err : "Media upload failed");
+
+    return res.status(400).json({ message });
+  });
+}
+
 // Create post
-router.post("/", auth, upload.array("media", 10), async (req, res) => {
+router.post("/", auth, handlePostUpload, async (req, res) => {
   try {
     const { caption, carTags } = req.body || {};
     const mediaUrls = (req.files || []).map((f) => f.path);
+
+    let parsedCarTags = [];
+    if (Array.isArray(carTags)) {
+      parsedCarTags = carTags;
+    } else if (typeof carTags === "string" && carTags.trim()) {
+      try {
+        parsedCarTags = JSON.parse(carTags);
+      } catch {
+        parsedCarTags = [];
+      }
+    }
 
     const post = await Post.create({
       authorId: req.user.id,
       caption: caption || "",
       mediaUrls,
-      carTags: carTags ? JSON.parse(carTags) : [],
+      carTags: parsedCarTags,
     });
 
     const populated = await post.populate(["authorId", "carTags"]);
@@ -99,6 +123,31 @@ router.get("/:id", async (req, res) => {
     res.json({ post, comments });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// Edit post caption/tags (author only)
+router.patch("/:id", auth, async (req, res) => {
+  try {
+    const post = await Post.findOne({ _id: req.params.id, authorId: req.user.id });
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    const { caption, carTags } = req.body || {};
+    if (caption !== undefined) post.caption = String(caption || "");
+
+    if (carTags !== undefined) {
+      if (Array.isArray(carTags)) {
+        post.carTags = carTags;
+      } else {
+        return res.status(400).json({ message: "carTags must be an array" });
+      }
+    }
+
+    await post.save();
+    const populated = await post.populate(["authorId", "carTags"]);
+    res.json(populated);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 

@@ -13,6 +13,7 @@ const carSchema = new mongoose.Schema(
     goals: [String], // e.g., ["comfort", "performance", "show", "track"]
     tags: [String], // custom tags
     thumbnailUrl: { type: String, default: "" },
+    photoUrls: [String],
   },
   { timestamps: true }
 );

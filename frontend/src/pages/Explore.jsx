@@ -86,6 +86,14 @@ export default function Explore() {
     }
   };
 
+  const handlePostUpdated = (updatedPost) => {
+    setPosts((prev) => prev.map((p) => (p._id === updatedPost._id ? { ...p, ...updatedPost } : p)));
+  };
+
+  const handlePostDeleted = (postId) => {
+    setPosts((prev) => prev.filter((p) => p._id !== postId));
+  };
+
   if (loading && posts.length === 0) return <div className="loading">Loading posts...</div>;
 
   return (
@@ -102,6 +110,8 @@ export default function Explore() {
               onLike={handleLike}
               isLiked={post.likes?.some((l) => l === currentUser?._id)}
               currentUserId={currentUser?._id}
+              onPostUpdated={handlePostUpdated}
+              onPostDeleted={handlePostDeleted}
             />
           ))
         )}

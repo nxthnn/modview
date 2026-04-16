@@ -14,6 +14,7 @@ const commentRoutes = require("./src/routes/comments");
 const followRoutes = require("./src/routes/follows");
 const maintenanceRoutes = require("./src/routes/maintenance");
 const modRoutes = require("./src/routes/mods");
+const plansRoutes = require("./src/routes/plans");
 const aiRoutes = require("./src/routes/ai");
 const userRoutes = require("./src/routes/users");
 console.log("✅ Routes loaded successfully");
@@ -23,11 +24,25 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "https://modview.co.uk",
-      "https://www.modview.co.uk",
-      process.env.CLIENT_ORIGIN
-    ].filter(Boolean),
+    origin: (origin, callback) => {
+      const whitelist = [
+        "https://modview.co.uk",
+        "https://www.modview.co.uk",
+        process.env.CLIENT_ORIGIN,
+      ].filter(Boolean);
+
+      // Allow localhost development (any port)
+      const isLocalhost = !origin || origin.includes("localhost") || origin.includes("127.0.0.1");
+
+      if (isLocalhost || whitelist.includes(origin)) {
+        callback(null, true);
+      } else if (!origin) {
+        // Allow requests without origin (like curl, Postman, mobile apps)
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
     credentials: false,
   })
 );
@@ -41,6 +56,7 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/follows", followRoutes);
 app.use("/api/maintenance", maintenanceRoutes);
 app.use("/api/mods", modRoutes);
+app.use("/api/plans", plansRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/users", userRoutes);
 

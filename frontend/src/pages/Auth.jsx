@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 
@@ -14,12 +14,74 @@ export default function Auth() {
   const [mode, setMode] = useState("login"); // "login" | "register"
   const isLogin = mode === "login";
 
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [usernameStatus, setUsernameStatus] = useState("idle");
+  const [usernameMessage, setUsernameMessage] = useState("");
+
+  useEffect(() => {
+    if (isLogin) {
+      setUsernameStatus("idle");
+      setUsernameMessage("");
+      return;
+    }
+
+    const value = username.trim().toLowerCase();
+
+    if (!value) {
+      setUsernameStatus("idle");
+      setUsernameMessage("");
+      return;
+    }
+
+    if (value.length < 3) {
+      setUsernameStatus("idle");
+      setUsernameMessage("Username must be at least 3 characters.");
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(async () => {
+      try {
+        setUsernameStatus("checking");
+        setUsernameMessage("Checking availability...");
+
+        const res = await fetch(
+          `${apiBase}/api/auth/check-username?username=${encodeURIComponent(value)}`,
+          { signal: controller.signal }
+        );
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          setUsernameStatus("error");
+          setUsernameMessage(data.message || "Unable to check username right now.");
+          return;
+        }
+
+        if (data.available) {
+          setUsernameStatus("available");
+          setUsernameMessage("Username is available.");
+        } else {
+          setUsernameStatus("unavailable");
+          setUsernameMessage("Username is already taken.");
+        }
+      } catch (err) {
+        if (err?.name === "AbortError") return;
+        setUsernameStatus("error");
+        setUsernameMessage("Unable to check username right now.");
+      }
+    }, 350);
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(timeoutId);
+    };
+  }, [apiBase, isLogin, username]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -35,12 +97,36 @@ export default function Auth() {
       return;
     }
 
+    if (!isLogin) {
+      if (usernameStatus === "checking") {
+        setError("Please wait for username availability to finish checking");
+        return;
+      }
+
+      const normalizedUsername = username.trim().toLowerCase();
+
+      if (!normalizedUsername) {
+        setError("Username is required");
+        return;
+      }
+
+      if (normalizedUsername.length < 3) {
+        setError("Username must be at least 3 characters");
+        return;
+      }
+
+      if (usernameStatus === "unavailable") {
+        setError("That username is already taken");
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
       const payload = isLogin
-        ? { email, password }
-        : { email, password }; // add name later if your backend expects it
+        ? { identifier: email.trim(), password }
+        : { username: username.trim(), email, password };
 
       const res = await fetch(`${apiBase}${endpoint}`, {
         method: "POST",
@@ -101,20 +187,40 @@ export default function Auth() {
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
+          {!isLogin && (
+            <div className="form-row">
+              <label className="auth-label" htmlFor="username">
+                Username
+              </label>
+              <input
+                id="username"
+                className="auth-input"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="your-handle"
+                autoComplete="username"
+                required
+              />
+              <p className={`auth-help ${usernameStatus}`}>{usernameMessage || "Choose a unique username."}</p>
+            </div>
+          )}
+
           <div className="form-row">
             <label className="auth-label" htmlFor="email">
-              Email
+              {isLogin ? "Username or email" : "Email"}
             </label>
             <input
               id="email"
               className="auth-input"
-              type="email"
+              type={isLogin ? "text" : "email"}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              autoComplete="email"
+              placeholder={isLogin ? "your-handle or you@example.com" : "you@example.com"}
+              autoComplete={isLogin ? "username" : "email"}
               required
             />
+            {isLogin && <p className="auth-help">You can sign in with either your username or email.</p>}
           </div>
 
           <div className="form-row">
@@ -153,7 +259,11 @@ export default function Auth() {
 
           {error && <p className="auth-error">{error}</p>}
 
-          <button className="primary-btn" type="submit" disabled={loading}>
+          <button
+            className="primary-btn"
+            type="submit"
+            disabled={loading || (!isLogin && usernameStatus === "checking")}
+          >
             {loading ? "Please wait..." : isLogin ? "Login" : "Create account"}
           </button>
         </form>

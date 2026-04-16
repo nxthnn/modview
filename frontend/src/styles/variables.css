@@ -17,10 +17,10 @@
 
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 
-  --container: 1100px;
+  --container: 1360px;
 
   --gap: 16px;
-  --gap-lg: 24px;
+  --gap-lg: 12px;
 
   --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }

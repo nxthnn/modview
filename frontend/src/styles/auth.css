@@ -68,6 +68,25 @@
   color: var(--muted);
 }
 
+.auth-help {
+  margin: -2px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.auth-help.available {
+  color: #68e0a6;
+}
+
+.auth-help.unavailable,
+.auth-help.error {
+  color: #ff728a;
+}
+
+.auth-help.checking {
+  color: #9ecbff;
+}
+
 /* Inputs */
 .auth-input {
   width: 100%;
@@ -75,12 +94,12 @@
   border-radius: 12px;
   border: 1px solid var(--border);
   background: rgba(0, 0, 0, 0.35);
-  color: var(--text);
+  color: #ffffff;
   outline: none;
 }
 
 .auth-input::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .auth-input:focus {

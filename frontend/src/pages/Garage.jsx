@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/garage.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function Garage() {
+  const navigate = useNavigate();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [formError, setFormError] = useState("");
   const [newCarData, setNewCarData] = useState({
     make: "",
     model: "",
@@ -25,6 +27,13 @@ export default function Garage() {
       const res = await fetch(`${API_URL}/api/cars`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (res.status === 401) {
+        localStorage.removeItem("modview_token");
+        navigate("/auth", { replace: true });
+        return;
+      }
+
       if (res.ok) {
         const data = await res.json();
         setCars(data);
@@ -38,6 +47,7 @@ export default function Garage() {
 
   const handleAddCar = async (e) => {
     e.preventDefault();
+    setFormError("");
     try {
       const token = localStorage.getItem("modview_token");
       const res = await fetch(`${API_URL}/api/cars`, {
@@ -48,14 +58,27 @@ export default function Garage() {
         },
         body: JSON.stringify(newCarData),
       });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.status === 401) {
+        localStorage.removeItem("modview_token");
+        navigate("/auth", { replace: true });
+        return;
+      }
+
       if (res.ok) {
-        const car = await res.json();
+        const car = data;
         setCars([...cars, car]);
         setNewCarData({ make: "", model: "", year: new Date().getFullYear() });
         setShowForm(false);
+        return;
       }
+
+      setFormError(data.message || "Could not add car. Please try again.");
     } catch (err) {
       console.error(err);
+      setFormError("Network error. Check backend connection and try again.");
     }
   };
 
@@ -64,6 +87,11 @@ export default function Garage() {
   return (
     <section className="garage-page">
       <h1>My Garage</h1>
+      <div style={{ marginBottom: 16 }}>
+        <Link className="timeline-link" to="/ai">
+          Open AI Adviser
+        </Link>
+      </div>
 
       {cars.length === 0 ? (
         <div className="no-cars">
@@ -73,7 +101,9 @@ export default function Garage() {
         <div className="cars-list">
           {cars.map((car) => (
             <Link key={car._id} to={`/garage/${car._id}`} className="car-card">
-              {car.thumbnailUrl && <img src={car.thumbnailUrl} alt="car" />}
+              {(car.thumbnailUrl || car.photoUrls?.[0]) && (
+                <img src={car.thumbnailUrl || car.photoUrls?.[0]} alt="car" />
+              )}
               <div className="car-card-info">
                 <h3>
                   {car.year} {car.make} {car.model}
@@ -122,6 +152,7 @@ export default function Garage() {
             <button type="button" onClick={() => setShowForm(false)}>
               Cancel
             </button>
+            {formError && <p className="error">{formError}</p>}
           </form>
         ) : (
           <button className="primary-btn" onClick={() => setShowForm(true)}>
